@@ -1,0 +1,9 @@
+The sample data files given in this directory are used for demostration purposes only.
+
+Every directory has two files: a data file and a header file. The data file (either .raw or .kraw) contains the volume data in the spatial (.raw) or the k-space (.kraw) domains.
+The header file contains the meta-data about the volume including its dimensions, type and format.
+The header is organized in the following format:
+
+    DIMENSIONS = [WIDTH] [HEIGHT] [DEPTH]
+    TYPE = [SPATIAL] OR [SPECTRAL]
+    FORMAT = [8BIT] [16BIT] [32BIT]

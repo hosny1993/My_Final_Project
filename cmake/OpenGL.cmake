@@ -1,6 +1,6 @@
 ################################################################################
-### Copyrights (c) EPFL/BBP 2015
-### Marwan Abdellah <marwanm.abdellah@epfl.ch>
+### Copyrights (c) 2015
+### Marwan Abdellah <abdellah.marwan@gmail.com>
 ################################################################################
 
 find_package( OpenGL REQUIRED )

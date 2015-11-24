@@ -1,3 +1,8 @@
+################################################################################
+### Copyrights (c) 2015
+### Marwan Abdellah <abdellah.marwan@gmail.com>
+################################################################################
+
 # Project name 
 project( clFVR )
 
@@ -15,7 +20,7 @@ include( Qt )
 include_directories( ${PROJECT_BINARY_DIR} )
 
 # Add the src directory to the CMake tree and set the source/header/ui files
-set( CL_FVR_SOURCES "" )
-set( CL_FVR_HEADERS "" )
+set( CL_FVR_SOURCES )
+set( CL_FVR_HEADERS )
 
 add_subdirectory( src )

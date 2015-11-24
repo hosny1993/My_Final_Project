@@ -2,6 +2,7 @@
 #define CLFVRWINDOW_H
 
 #include <QMainWindow>
+#include <Headers.hh>
 
 namespace Ui {
 class clFVRWindow;
