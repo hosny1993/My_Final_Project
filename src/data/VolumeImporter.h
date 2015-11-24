@@ -25,6 +25,8 @@ private:
      */
     void loadHeader_();
 
+    void loadData_();
+
 private:
 
     /**
