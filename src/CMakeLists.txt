@@ -9,6 +9,8 @@ list( APPEND CL_FVR_SOURCES
     data/ComplexVolume.ipp
     data/Image.cpp
     data/Image.ipp
+    data/Line.cpp
+    data/Line.ipp
     data/Volume.cpp
     data/Volume.ipp
     fft/FFT.cpp
@@ -27,6 +29,7 @@ list( APPEND CL_FVR_HEADERS
     data/ComplexImage.h
     data/ComplexVolume.h
     data/Image.h
+    data/Line.h
     data/Volume.h
     fft/FFT.h
     fft/FFTShift.h

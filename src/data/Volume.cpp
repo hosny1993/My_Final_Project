@@ -57,7 +57,7 @@ void Volume< T >::loadVolumeData_( const std::string prefix )
     loadHeaderData_( prefix );
 
     // Allocate the volume
-    data_ = new T[dimensions_.volumeSize()];
+    data_ = new T[ dimensions_.volumeSize() ];
 
     std::string filePath = prefix + std::string( ".img" );
 
@@ -98,23 +98,27 @@ uint64_t Volume< T >::get1DIndex( const Voxel3DIndex index ) const
 }
 
 template< class T >
-T Volume< T >::getValue( const uint64_t x,
-                         const uint64_t y,
-                         const uint64_t z ) const
+T* Volume< T >::getValue( const uint64_t x,
+                          const uint64_t y,
+                          const uint64_t z ) const
 {
     const uint64_t index = get1DIndex( x, y, z );
-    return data_[index];
+    T* value = new T[ 1 ];
+    *value = data_[ index ];
+    return value;
 }
 
 template< class T >
-T Volume< T >::getValue( const Voxel3DIndex xyz ) const
+T *Volume<T>::getValue( const Voxel3DIndex xyz ) const
 {
     const u_int64_t index = get1DIndex( xyz.x, xyz.y, xyz.z );
-    return data_[index];
+    T* value = new T[ 1 ];
+    *value = data_[ index ];
+    return value;
 }
 
 template< class T >
-const T* Volume< T >::getData() const
+T* Volume< T >::getData() const
 {
     return data_;
 }
@@ -336,5 +340,12 @@ Image<T>* Volume<T>::getProjectionZ() const
     Image< T >* projection = new Image< T >( sliceDimensions, sliceData );
     return projection;
 }
+
+template< class T >
+Volume< T >::~Volume()
+{
+    delete [] data_;
+}
+
 
 #include <Volume.ipp>

@@ -7,7 +7,59 @@ template< class T >
 class ComplexImage : public Image< T >
 {
 public:
-    ComplexImage();
+
+    /**
+     * @brief ComplexImage
+     * @param dimensions
+     * @param data
+     */
+    ComplexImage( const Dimensions2D dimensions, T* data );
+
+    /**
+     * @brief getSizeInBytes
+     * @return Size of the image in bytes.
+     */
+    uint64_t getSizeInBytes() const;
+
+    /**
+     * @brief getValue
+     * Gets the value of a pixel in the volume specified by the XY coordinates.
+     * @param x
+     * @param y
+     * @return Pixel value at the given coordinates.
+     */
+    T* getValue( const uint64_t x, const uint64_t y ) const;
+
+    /**
+     * @brief getValue
+     * @param xy
+     * @return Pixel value at the given pixel index.
+     */
+    T* getValue( const Pixel2DIndex xy ) const;
+
+    /**
+     * @brief getRealValue
+     * @param x
+     * @param y
+     * @return
+     */
+    T getRealValue( const uint64_t x, const uint64_t y ) const;
+
+    T getRealValue( const Pixel2DIndex xy ) const;
+
+    T getImaginaryValue( const uint64_t x, const uint64_t y ) const;
+
+    T getImaginaryValue( const Pixel2DIndex xy ) const;
+
+    T getMagnitudeValue( const uint64_t x, const uint64_t y ) const;
+
+    T getMagnitudeValue( const Pixel2DIndex xy ) const;
+
+    T getPhaseValue( const uint64_t x, const uint64_t y ) const;
+
+    T getPhaseValue( const Pixel2DIndex xy ) const;
+
+
 };
 
 /**

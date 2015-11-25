@@ -16,6 +16,7 @@ public: // Constructors
      * @param prefix
      */
     Volume( const std::string prefix, const bool drawBoundingBox = false );
+    ~Volume();
 
 public: // Public functions
 
@@ -47,7 +48,7 @@ public: // Public functions
      * @brief getSizeInBytes
      * @return Size of the volume in bytes.
      */
-    uint64_t getSizeInBytes() const;
+    virtual uint64_t getSizeInBytes() const;
 
     /**
      * @brief getValue
@@ -57,20 +58,20 @@ public: // Public functions
      * @param z
      * @return Voxel value at the given coordinates.
      */
-    T getValue( const uint64_t x, const uint64_t y, const uint64_t z ) const;
+    virtual T* getValue( const uint64_t x, const uint64_t y, const uint64_t z ) const;
 
     /**
      * @brief getValue
      * @param xyz
      * @return Voxel value at the given voxel index.
      */
-    T getValue( const Voxel3DIndex xyz ) const;
+    virtual T* getValue( const Voxel3DIndex xyz ) const;
 
     /**
      * @brief getData
      * @return A pointer to the data of the volume.
      */
-    const T* getData() const;
+    virtual T* getData() const;
 
     /**
      * @brief get1DIndex

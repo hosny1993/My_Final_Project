@@ -9,6 +9,12 @@ template< class T >
 class Image
 {
 public:
+
+    /**
+     * @brief Image
+     * @param dimensions
+     * @param data
+     */
     Image( const Dimensions2D dimensions, T* data );
 
 public: // Public functions
@@ -32,18 +38,6 @@ public: // Public functions
     uint64_t getSizeY() const;
 
     /**
-     * @brief getSizeInBytes
-     * @return Size of the image in bytes.
-     */
-    uint64_t getSizeInBytes() const;
-
-    /**
-     * @brief getData
-     * @return A pointer to the data of the volume.
-     */
-    T* getData() const;
-
-    /**
      * @brief get1DIndex
      * Computes the 1D index of a pixel in a 2D image given by the XY
      * coordinates.
@@ -65,20 +59,32 @@ public: // Public functions
     uint64_t get1DIndex( const Pixel2DIndex index ) const;
 
     /**
+     * @brief getSizeInBytes
+     * @return Size of the image in bytes.
+     */
+    virtual uint64_t getSizeInBytes() const;
+
+    /**
+     * @brief getData
+     * @return A pointer to the data of the volume.
+     */
+    virtual T* getData() const;
+
+    /**
      * @brief getValue
      * Gets the value of a pixel in the volume specified by the XY coordinates.
      * @param x
      * @param y
      * @return Pixel value at the given coordinates.
      */
-    T getValue( const uint64_t x, const uint64_t y ) const;
+    virtual T* getValue( const uint64_t x, const uint64_t y ) const;
 
     /**
      * @brief getValue
      * @param xy
      * @return Pixel value at the given pixel index.
      */
-    T getValue( const Pixel2DIndex xy ) const;
+    virtual T* getValue( const Pixel2DIndex xy ) const;
 
 protected: // Protected (private) member variables
 

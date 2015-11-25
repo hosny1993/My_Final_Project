@@ -49,21 +49,24 @@ uint64_t Image< T >::get1DIndex( const Pixel2DIndex index ) const
 {
     // Flat[x + WIDTH * y] = Original[x, y]
     return ( index.x + ( dimensions_.x * index.y ));
-
 }
 
 template< class T >
-T Image< T >::getValue( const uint64_t x, const uint64_t y ) const
+T* Image<T>::getValue( const uint64_t x, const uint64_t y ) const
 {
     const uint64_t index = get1DIndex( x, y );
-    return data_[index];
+    T* value = new T[ 1 ];
+    *value = data_[ index ];
+    return value;
 }
 
 template< class T >
-T Image< T >::getValue( const Pixel2DIndex xy ) const
+T* Image< T >::getValue( const Pixel2DIndex xy ) const
 {
     const u_int64_t index = get1DIndex( xy.x, xy.y );
-    return data_[index];
+    T* value = new T[ 1 ];
+    *value = data_[ index ];
+    return value;
 }
 
 #include <Image.ipp>
