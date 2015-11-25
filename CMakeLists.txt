@@ -1,16 +1,27 @@
 ################################################################################
 ### Copyrights (c) 2015
-### Marwan Abdellah <abdellah.marwan@gmail.com>
+### Marwan Abdellah < abdellah.marwan@gmail.com >
 ################################################################################
 
-# Project name 
-project( clFVR )
+# OpenCL-based Fourier Volume Rendering
+project( oclFVR )
 
 # Set the minimum version of CMake to be able to run the application
 cmake_minimum_required( VERSION 2.8 )
 
 ### Add CMake modules
 set( CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake )
+
+message($ENV{QTDIR})
+if( APPLE )
+    # Check if environment variable QTDIR is set.
+    # Extra security for windows environment as well.
+    if( DEFINED ENV{QTDIR} )
+        set( CMAKE_PREFIX_PATH $ENV{QTDIR} ${CMAKE_PREFIX_PATH} )
+    else()
+        message( FATAL_ERROR "ERROR: Environment variable QTDIR is not set. Please locate your Qt folder QT5DIR." )
+    endif ()
+endif()
 
 ### Dependencies
 include( OpenGL )

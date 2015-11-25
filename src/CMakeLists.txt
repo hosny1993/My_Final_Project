@@ -3,14 +3,18 @@ set( CURRENT_DIR ${CMAKE_CURRENT_SOURCE_DIR} )
 
 # Add the source files to the CMake tree
 list( APPEND CL_FVR_SOURCES
-    data/Volume.cpp
-    data/Volume.ipp
+    data/ComplexImage.cpp
+    data/ComplexImage.ipp
     data/ComplexVolume.cpp
     data/ComplexVolume.ipp
-    data/VolumeExporter.cpp
-    data/VolumeImporter.cpp
+    data/Image.cpp
+    data/Image.ipp
+    data/Volume.cpp
+    data/Volume.ipp
     fft/FFT.cpp
     fft/FFTShift.cpp
+    geometry/Vector2.cpp
+    geometry/Vector2.ipp
     geometry/Vector3.cpp
     geometry/Vector3.ipp
     rendering/AbstractRenderer.cpp
@@ -20,12 +24,13 @@ list( APPEND CL_FVR_SOURCES
 list( APPEND CL_FVR_HEADERS
     common/Headers.hh
     common/Typedefs.hh
-    data/Volume.h
+    data/ComplexImage.h
     data/ComplexVolume.h
-    data/VolumeExporter.h
-    data/VolumeImporter.h
+    data/Image.h
+    data/Volume.h
     fft/FFT.h
     fft/FFTShift.h
+    geometry/Vector2.h
     geometry/Vector3.h
     rendering/AbstractRenderer.h
 )

@@ -1,0 +1,5 @@
+#ifndef COMPLEXIMAGE_IPP
+#define COMPLEXIMAGE_IPP
+
+#endif // COMPLEXIMAGE_IPP
+
