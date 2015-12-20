@@ -40,12 +40,12 @@ void Volume< T >::loadHeaderData_( const std::string prefix )
     // Open the header file
     std::ifstream hdrFileStream( filePath.c_str());
 
-    // Volume dimensions
-    hdrFileStream >> dimensions_.x;
-    hdrFileStream >> dimensions_.y;
-    hdrFileStream >> dimensions_.z;
+    // Volume dimensions assume it's a cube Nx * Ny * Nz
+    hdrFileStream >> dimensions_.x; // >> read for the first whitespace
+    hdrFileStream >> dimensions_.y; // >> read for the first whitespace
+    hdrFileStream >> dimensions_.z; // >> read for the first whitespace
 
-    sizeInBytes_ = dimensions_.volumeSize() * sizeof( T );
+    sizeInBytes_ = dimensions_.volumeSize() * sizeof( T ); // multiply x * y * z in class Vector3 with alias here to Dimenstion3
 
     // Close the stream
     hdrFileStream.close();
@@ -57,7 +57,7 @@ void Volume< T >::loadVolumeData_( const std::string prefix )
     loadHeaderData_( prefix );
 
     // Allocate the volume
-    data_ = new T[ dimensions_.volumeSize() ];
+    data_ = new T[ dimensions_.volumeSize() ]; // like int* x = new int[6];   becasue int[] return pointer from type int
 
     std::string filePath = prefix + std::string( ".img" );
 

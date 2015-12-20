@@ -3,6 +3,9 @@
 
 #include <QWidget>
 #include <Volume.h>
+#include <clFFT.h>
+#include <FFT.h>
+#include <stdio.h>
 
 namespace Ui {
 class VolumeSlicerWindow;
@@ -15,6 +18,7 @@ class VolumeSlicerWindow : public QWidget
 public:
     explicit VolumeSlicerWindow( QWidget *parent = 0,
                                  std::string volumePrefix = "" );
+    u_int8_t* xSliceFFT();
     ~VolumeSlicerWindow();
 
 private slots: // Slots
@@ -80,6 +84,8 @@ private: // Private member variables
      * @brief ui
      */
     Ui::VolumeSlicerWindow *ui;
+
+
 };
 
 #endif // VOLUMESLICERWINDOW_H

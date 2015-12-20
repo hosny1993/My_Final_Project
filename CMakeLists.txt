@@ -26,6 +26,7 @@ endif()
 ### Dependencies
 include( OpenGL )
 include( Qt )
+include( OpenCL)
 
 # Add the binary directory to the include and set off the mocs.
 include_directories( ${PROJECT_BINARY_DIR} )

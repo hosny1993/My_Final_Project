@@ -15,7 +15,7 @@ add_executable( ${VOLUME_SLICER_APP_EXECUTABLE}
 )
 
 # Link the application against the CLFVR library
-target_link_libraries(${VOLUME_SLICER_APP_EXECUTABLE} ${CL_FVR_LIBRARY})
+target_link_libraries(${VOLUME_SLICER_APP_EXECUTABLE} ${CL_FVR_LIBRARY} clFFT)
 
 # Make sure to use the required Qt modules
 qt5_use_modules( ${VOLUME_SLICER_APP_EXECUTABLE} Core Widgets OpenGL Gui )
