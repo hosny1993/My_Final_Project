@@ -191,7 +191,7 @@ u_int8_t* VolumeSlicerWindow::xSliceFFT()
                             );
     for (int i = 0; i < xSize * ySize * zSize; i++)
     {
-        std::cout << i << " : " << fftData[i] << std::endl;
+        //std::cout << i << " : " << fftData[i] << std::endl;
     }
 
 
