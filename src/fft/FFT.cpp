@@ -30,37 +30,30 @@ float* FFT::oclFFT::clFFT1D( clfftPrecision precision,
 {
     size_t N = sizeOfData ;
     float* ret = (float*) malloc (2 * N * sizeof(input));
-    /************************************************************************************************/
-    /*                               Setup clFFT                                                    */
 
+    /* Setup clFFT */
     clfftStatus status;
     clfftSetupData setupData;
     status = clfftInitSetupData(&setupData);
     status = clfftSetup(&setupData);
 
-    /************************************************************************************************/
-    /*                               planhande clFFT                                                */
-
+    /* planhande clFFT */
     clfftPlanHandle planHandle;
     size_t length[1] = {N};
 
-    /************************************************************************************************/
-    /*                               create memory                                                  */
+    /* create memory */
     inputBuffer_ = clCreateBuffer(context_, CL_MEM_READ_WRITE,
                                         2 * N * sizeof(input), NULL, &err_);
     err_ = clEnqueueWriteBuffer(commandQueue_, inputBuffer_, CL_TRUE, 0,
             2 * N * sizeof(input), input, 0, NULL, NULL);
 
-    /************************************************************************************************/
-    /*                               create plane                                                   */
+    /* create plane  */
     status = clfftCreateDefaultPlan(&planHandle, context_, CLFFT_1D, length);
     status = clfftSetPlanPrecision(planHandle, precision);
     status = clfftSetLayout(planHandle, layout , layout);
     status = clfftSetResultLocation(planHandle, CLFFT_INPLACE);
 
-    /************************************************************************************************/
-    /*                               bake plane                                                     */
-
+    /* bake plane */
     status = clfftBakePlan(planHandle, 1, &commandQueue_, NULL, NULL);
     status = clfftEnqueueTransform(planHandle, direction, 1, &commandQueue_, 0,
                                    NULL, NULL, &inputBuffer_, NULL, NULL);
@@ -68,9 +61,7 @@ float* FFT::oclFFT::clFFT1D( clfftPrecision precision,
     clEnqueueReadBuffer(commandQueue_, inputBuffer_, CL_TRUE, 0,
                         2 * N * sizeof(ret), ret, 0, NULL, NULL);
 
-    /************************************************************************************************/
-    /*                               Free system                                                    */
-
+    /* Free system */
     clfftDestroyPlan(&planHandle);
     clfftTeardown();
     free(input);
@@ -86,39 +77,30 @@ float* FFT::oclFFT::clFFT2D( clfftPrecision precision,
                             float* input)
 {
     float* ret = (float*) malloc (2 * N1 * N2 * sizeof(input));
-    /************************************************************************************************/
-    /*                               Setup clFFT                                                    */
 
+    /* Setup clFFT */
     clfftStatus status;
     clfftSetupData setupData;
     status = clfftInitSetupData(&setupData);
     status = clfftSetup(&setupData);
 
-    /************************************************************************************************/
-    /*                               planhande clFFT                                                */
-
+    /* planhande clFFT */
     clfftPlanHandle planHandle;
     size_t length[2] = {N1, N2};
 
-    /************************************************************************************************/
-    /*                               create memory                                                  */
-
+    /* create memory */
     inputBuffer_ = clCreateBuffer(context_, CL_MEM_READ_WRITE,
                                         2 * N1 * N2 * sizeof(input), NULL, &err_);
     err_ = clEnqueueWriteBuffer(commandQueue_, inputBuffer_, CL_TRUE, 0,
             2 * N1 * N2 * sizeof(input), input, 0, NULL, NULL);
 
-    /************************************************************************************************/
-    /*                               create plane                                                   */
-
+    /* create plane */
     status = clfftCreateDefaultPlan(&planHandle, context_, CLFFT_2D, length);
     status = clfftSetPlanPrecision(planHandle, precision);
     status = clfftSetLayout(planHandle, layout , layout );
     status = clfftSetResultLocation(planHandle, CLFFT_INPLACE);
 
-    /************************************************************************************************/
-    /*                               bake plane                                                     */
-
+    /* bake plane */
     status = clfftBakePlan(planHandle, 1, &commandQueue_, NULL, NULL);
     status = clfftEnqueueTransform(planHandle, direction, 1, &commandQueue_, 0,
                                    NULL, NULL, &inputBuffer_, NULL, NULL);
@@ -126,9 +108,7 @@ float* FFT::oclFFT::clFFT2D( clfftPrecision precision,
     clEnqueueReadBuffer(commandQueue_, inputBuffer_, CL_TRUE, 0,
                         2 * N1 * N2 * sizeof(ret), ret, 0, NULL, NULL);
 
-    /************************************************************************************************/
-    /*                               Free system                                                    */
-
+    /* Free system */
     clfftDestroyPlan(&planHandle);
     clfftTeardown();
     free(input);
@@ -145,39 +125,32 @@ float* FFT::oclFFT::clFFT3D( clfftPrecision precision,
                             float* input)
 {
     float* ret = (float*) malloc (2 * N1 * N2 * N3 * sizeof(input));
-    /************************************************************************************************/
-    /*                               Setup clFFT                                                    */
+
+    /* Setup clFFT */
 
     clfftStatus status;
     clfftSetupData setupData;
     status = clfftInitSetupData(&setupData);
     status = clfftSetup(&setupData);
 
-    /************************************************************************************************/
-    /*                               planhande clFFT                                                */
-
+    /* planhande clFFT */
     clfftPlanHandle planHandle;
     size_t length[3] = {N1, N2, N3};
 
-    /************************************************************************************************/
-    /*                               create memory                                                  */
+    /* create memory */
 
     inputBuffer_ = clCreateBuffer(context_, CL_MEM_READ_WRITE,
                                         2 * N1 * N2 * N3 * sizeof(input), NULL, &err_);
     err_ = clEnqueueWriteBuffer(commandQueue_, inputBuffer_, CL_TRUE, 0,
             2 * N1 * N2 * N3 * sizeof(input), input, 0, NULL, NULL);
 
-    /************************************************************************************************/
-    /*                               create plane                                                   */
-
+    /* create plane */
     status = clfftCreateDefaultPlan(&planHandle, context_, CLFFT_3D, length);
     status = clfftSetPlanPrecision(planHandle, precision);
     status = clfftSetLayout(planHandle, layout , layout );
     status = clfftSetResultLocation(planHandle, CLFFT_INPLACE);
 
-    /************************************************************************************************/
-    /*                               bake plane                                                     */
-
+    /* bake plane */
     status = clfftBakePlan(planHandle, 1, &commandQueue_, NULL, NULL);
     status = clfftEnqueueTransform(planHandle, direction, 1, &commandQueue_, 0,
                                    NULL, NULL, &inputBuffer_, NULL, NULL);
@@ -185,8 +158,8 @@ float* FFT::oclFFT::clFFT3D( clfftPrecision precision,
     clEnqueueReadBuffer(commandQueue_, inputBuffer_, CL_TRUE, 0,
                         2 * N1 * N2 * N3 * sizeof(ret), ret, 0, NULL, NULL);
 
-    /************************************************************************************************/
-    /*                               Free system                                                    */
+
+    /* Free system */
 
     clfftDestroyPlan(&planHandle);
     clfftTeardown();
