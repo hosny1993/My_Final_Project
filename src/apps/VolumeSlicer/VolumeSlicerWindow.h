@@ -6,6 +6,7 @@
 #include <clFFT.h>
 #include <FFT.h>
 #include <stdio.h>
+#include <math.h>
 
 namespace Ui {
 class VolumeSlicerWindow;

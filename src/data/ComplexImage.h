@@ -41,22 +41,60 @@ public:
      * @brief getRealValue
      * @param x
      * @param y
-     * @return
+     * @return real value at the given coordinates.
      */
     T getRealValue( const uint64_t x, const uint64_t y ) const;
 
+    /**
+     * @brief getRealValue
+     * @param xy
+     * @return real value at the given coordinates.
+     */
     T getRealValue( const Pixel2DIndex xy ) const;
 
+    /**
+     * @brief getImaginaryValue
+     * @param x
+     * @param y
+     * @return imaginary value at the given coordinates.
+     */
     T getImaginaryValue( const uint64_t x, const uint64_t y ) const;
 
+    /**
+     * @brief getImaginaryValue
+     * @param xy
+     * @return imaginary value at the given coordinates.
+     */
     T getImaginaryValue( const Pixel2DIndex xy ) const;
 
+    /**
+     * @brief getMagnitudeValue
+     * @param x
+     * @param y
+     * @return Magnitude at the given coordinates.
+     */
     T getMagnitudeValue( const uint64_t x, const uint64_t y ) const;
 
+    /**
+     * @brief getMagnitudeValue
+     * @param xy
+     * @return Magnitude at the given coordinates.
+     */
     T getMagnitudeValue( const Pixel2DIndex xy ) const;
 
+    /**
+     * @brief getPhaseValue
+     * @param x
+     * @param y
+     * @return Phase at the given coordinates.
+     */
     T getPhaseValue( const uint64_t x, const uint64_t y ) const;
 
+    /**
+     * @brief getPhaseValue
+     * @param xy
+     * @return Phase at the given coordinates.
+     */
     T getPhaseValue( const Pixel2DIndex xy ) const;
 
 

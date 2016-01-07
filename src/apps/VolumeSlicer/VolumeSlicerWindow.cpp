@@ -23,7 +23,7 @@ VolumeSlicerWindow::VolumeSlicerWindow( QWidget *parent,
     ySliderChanged( ui->ySlider->value());
     zSliderChanged( ui->zSlider->value());
 
-    xSliceFFT();
+    //xSliceFFT();
 }
 
 VolumeSlicerWindow::~VolumeSlicerWindow()
@@ -95,65 +95,15 @@ void VolumeSlicerWindow::on_zSlider_valueChanged( int value )
 u_int8_t* VolumeSlicerWindow::xSliceFFT()
 {
 
-//    /* in this code i try to read projection data and display it to check fft */
-//    /* apply 2DFFT to data then 2DIFFT to check output of fft */
-
-//    Image8* xProjection = volume_->getProjectionX(); // get x projection
-//    u_int8_t* data = xProjection->getData();         // get reference to projection data
-
-//    u_int64_t xSize = volume_->getSizeX();  // size in x
-//    u_int64_t ySize = volume_->getSizeY();  // size in y
-
-//    float* fftData = NULL;
-//    size_t buffer_size  = 2 * xSize * ySize * sizeof(float*);
-//    fftData = (float*) malloc( buffer_size);
-
-//    for (int y = 0; y < ySize; y++)
-//        for (int x = 0; x < xSize; x++)
-//        {
-//            unsigned int idx = 2 * (x + y * ySize );
-//            fftData[idx] = 0.f;                                  // initialization
-//            fftData[idx] += data[xProjection->get1DIndex(x, y)]; // read data
-//            fftData[idx + 1] = 0.f; // imaginary to zero because we use interleaved complex
-//        }
-
-//    std::cout << "Data Before FFT : " << std::endl;
-//    for (int idx = 0; idx < xSize * ySize; idx++) // print half of values 256 * 256
-//    {
-//        std::cout << idx << " : " <<fftData[idx] << std::endl;
-//    }
-
-//    FFT::oclFFT fft2;
-//    fftData = fft2.clFFT2D( CLFFT_SINGLE,
-//                            CLFFT_COMPLEX_INTERLEAVED,
-//                            CLFFT_FORWARD,
-//                            sizeof(xSize),
-//                            sizeof(ySize),
-//                            fftData);
-
-
-//    fftData = fft2.clFFT2D( CLFFT_SINGLE,
-//                            CLFFT_COMPLEX_INTERLEAVED,
-//                            CLFFT_BACKWARD,
-//                            sizeof(xSize),
-//                            sizeof(ySize),
-//                            fftData);
-
-//    std::cout << "Data after FFT then inverseFFT : " << std::endl;
-//    for (int idx = 0; idx < xSize * ySize; idx++) //print half of values 256 * 256
-//    {
-//        std::cout << idx << " : " <<fftData[idx] << std::endl;
-//    }
-
     u_int8_t* volumeData = volume_->getData();
 
     u_int64_t xSize = volume_->getSizeX();
     u_int64_t ySize = volume_->getSizeY();
     u_int64_t zSize = volume_->getSizeZ();
 
-    size_t N0 = sizeof(xSize);
-    size_t N1 = sizeof(ySize);
-    size_t N2 = sizeof(zSize);
+    size_t N0 = xSize;
+    size_t N1 = ySize;
+    size_t N2 = zSize;
 
     float* fftData = NULL;
     size_t bufferSize = 2 * xSize * ySize * zSize * sizeof(float*);
@@ -166,8 +116,7 @@ u_int8_t* VolumeSlicerWindow::xSliceFFT()
             for (int x = 0; x < xSize; x++)
             {
                 unsigned int idx = 2 * (x + y * xSize + z * xSize * ySize);
-                fftData[idx]  = 0.f;
-                fftData[idx] += volumeData[volume_->get1DIndex(x, y, z)];
+                fftData[idx]  = volumeData[volume_->get1DIndex(x, y, z)];
                 fftData[idx + 1] = 0.f;
             }
         }
@@ -183,45 +132,24 @@ u_int8_t* VolumeSlicerWindow::xSliceFFT()
                             );
 
 
+    u_int8_t* data = (u_int8_t*) malloc( sizeof(u_int8_t*) * N0 * N1 * N2);
+    for (int i = 0; i < xSize * ySize * zSize; i++)
+    {
+        double x = sqrt( pow(fftData[2 * i], 2) + pow(fftData[2 * i + 1], 2) );
+        data[i] = x;
+    }
+
+    QImage xImage( data, xSize, ySize, QImage::Format_Grayscale8);
+    ui->xProjectionImage->setPixmap(QPixmap::fromImage( xImage ));
+    ui->xProjectionImage->show();
+
     fftData = fft3->clFFT3D(CLFFT_SINGLE,
                             CLFFT_COMPLEX_INTERLEAVED,
                             CLFFT_BACKWARD,
                             N0,N1,N2,
                             fftData
                             );
-    for (int i = 0; i < xSize * ySize * zSize; i++)
-    {
-        //std::cout << i << " : " << fftData[i] << std::endl;
-    }
 
-
-    /*
-    u_int64_t sliceIndex = 0;
-    for (int z = 0; z < zSize; z++)
-    {
-        for (int y = 0; y < ySize; y++)
-        {
-            unsigned int idx = (128 + y * zSize + z * ySize * zSize);
-            sliceData[sliceIndex] = sliceData[idx];
-            sliceIndex++;
-        }
-    }
-
-    fft3->clFFT2D(CLFFT_SINGLE,CLFFT_COMPLEX_INTERLEAVED,CLFFT_FORWARD, ySize, zSize,sl);
-
-    Dimensions2D sliceDimensions( xSize, ySize );
-    u_int8_t* sliceData = new u_int8_t[ xSize * ySize * zSize ];
-    float maxValue = 0;
-
-    for(u_int64_t i = 0; i < sliceDimensions.imageSize(); i++)
-    {
-        if( fftData[i] > maxValue ) maxValue = fftData[i];
-    }
-
-    for(u_int64_t i = 0; i < sliceDimensions.imageSize(); i++)
-    {
-        sliceData[i] = fftData[i] / maxValue * 255; // Now we have the data again of type u_int8_t
-    }*/
 
 
     return NULL;
