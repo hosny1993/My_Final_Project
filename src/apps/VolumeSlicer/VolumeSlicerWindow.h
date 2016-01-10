@@ -7,6 +7,7 @@
 #include <FFT.h>
 #include <stdio.h>
 #include <ComplexImage.h>
+#include <ComplexVolume.h>
 
 namespace Ui {
 class VolumeSlicerWindow;
@@ -76,6 +77,7 @@ private: // Private member variables
      */
     Volume8* volume_;
 
+    ComplexVolumeF* complexVolume_;
     /**
      * @brief volumePrefix_
      */

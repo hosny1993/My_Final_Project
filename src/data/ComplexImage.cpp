@@ -1,7 +1,8 @@
 #include "ComplexImage.h"
 
 template< class T >
-ComplexImage< T >::ComplexImage(const Dimensions2D dimensions, T *data)
+ComplexImage< T >::ComplexImage (const Dimensions2D dimensions, T *data)
+    : Image<T>(dimensions, NULL)
 {
     this->dimensions_ = dimensions;
     this->data_ = data;
@@ -42,8 +43,7 @@ template< class T >
 T ComplexImage<T>::getRealValue( const uint64_t x, const uint64_t y ) const
 {
     const uint64_t index = this->get1DIndex( x, y );
-    T real = NULL;
-    real = this->data_[ (2 * index) ];
+    T real = this->data_[ (2 * index) ];
     return real;
 }
 
@@ -52,8 +52,7 @@ template< class T >
 T ComplexImage<T>::getRealValue( const Pixel2DIndex xy  ) const
 {
     const uint64_t index = this->get1DIndex( xy );
-    T real = NULL;
-    real = this->data_[ (2 * index) ];
+    T real = this->data_[ (2 * index) ];
     return real;
 }
 
@@ -62,8 +61,7 @@ template< class T >
 T ComplexImage<T>::getImaginaryValue( const uint64_t x, const uint64_t y ) const
 {
     const uint64_t index = this->get1DIndex( x, y );
-    T imag = NULL;
-    imag = this->data_[ (2 * index) + 1];
+    T imag = this->data_[ (2 * index) + 1];
     return imag;
 }
 
@@ -72,8 +70,7 @@ template< class T >
 T ComplexImage<T>::getImaginaryValue( const Pixel2DIndex xy ) const
 {
     const uint64_t index = this->get1DIndex( xy );
-    T imag = NULL;
-    imag = this->data_[ (2 * index) + 1];
+    T imag = this->data_[ (2 * index) + 1];
     return imag;
 }
 
@@ -116,3 +113,5 @@ T ComplexImage<T>::getPhaseValue(const Pixel2DIndex xy) const
     T imag = this->data_[ (2 * index) + 1];
     return  atan( imag / real );
 }
+
+#include <ComplexImage.ipp>

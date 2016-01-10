@@ -1,6 +1,8 @@
 #ifndef COMPLEXVOLUME_H
 #define COMPLEXVOLUME_H
 
+#include <Headers.hh>
+#include <Typedefs.hh>
 #include <Volume.h>
 #include <ComplexImage.h>
 

@@ -95,64 +95,63 @@ void VolumeSlicerWindow::on_zSlider_valueChanged( int value )
 u_int8_t* VolumeSlicerWindow::xSliceFFT()
 {
 
-//    u_int8_t* volumeData = volume_->getData();
+    u_int8_t* volumeData = volume_->getData();
 
-//    u_int64_t xSize = volume_->getSizeX();
-//    u_int64_t ySize = volume_->getSizeY();
-//    u_int64_t zSize = volume_->getSizeZ();
+    u_int64_t xSize = volume_->getSizeX();
+    u_int64_t ySize = volume_->getSizeY();
+    u_int64_t zSize = volume_->getSizeZ();
 
-//    size_t N0 = xSize;
-//    size_t N1 = ySize;
-//    size_t N2 = zSize;
+    size_t N0 = xSize;
+    size_t N1 = ySize;
+    size_t N2 = zSize;
 
-//    float* fftData = NULL;
-//    size_t bufferSize = 2 * xSize * ySize * zSize * sizeof(float*);
-//    fftData = (float*) malloc(bufferSize);
+    float* fftData = NULL;
+    size_t bufferSize = 2 * xSize * ySize * zSize * sizeof(float*);
+    fftData = (float*) malloc(bufferSize);
 
-//    for (int z = 0; z < zSize; z++)
-//    {
-//        for (int y = 0; y < ySize; y++)
-//        {
-//            for (int x = 0; x < xSize; x++)
-//            {
-//                unsigned int idx = 2 * (x + y * xSize + z * xSize * ySize);
-//                fftData[idx]  = volumeData[volume_->get1DIndex(x, y, z)];
-//                fftData[idx + 1] = 0.f;
-//            }
-//        }
-//    }
+    for (int z = 0; z < zSize; z++)
+    {
+        for (int y = 0; y < ySize; y++)
+        {
+            for (int x = 0; x < xSize; x++)
+            {
+                unsigned int idx = 2 * (x + y * xSize + z * xSize * ySize);
+                fftData[idx]  = volumeData[volume_->get1DIndex(x, y, z)];
+                fftData[idx + 1] = 0.f;
+            }
+        }
+    }
 
-//    FFT::oclFFT* fft3 = new FFT::oclFFT();
+    FFT::oclFFT* fft3 = new FFT::oclFFT();
 
-//    fftData = fft3->clFFT3D(CLFFT_SINGLE,
-//                            CLFFT_COMPLEX_INTERLEAVED,
-//                            CLFFT_FORWARD,
-//                            N0,N1,N2,
-//                            fftData
-//                            );
+    fftData = fft3->clFFT3D( CLFFT_SINGLE,
+                             CLFFT_COMPLEX_INTERLEAVED,
+                             CLFFT_FORWARD,
+                             N0,N1,N2,
+                             fftData );
+
+    Dimensions3D dim3(N0, N1, N2);
+    complexVolume_ = new ComplexVolumeF(dim3, fftData);
+
+    fftData = fft3->clFFT3D( CLFFT_SINGLE,
+                             CLFFT_COMPLEX_INTERLEAVED,
+                             CLFFT_BACKWARD,
+                             N0,N1,N2,
+                             fftData );
 
 
-//    fftData = fft3->clFFT3D(CLFFT_SINGLE,
-//                            CLFFT_COMPLEX_INTERLEAVED,
-//                            CLFFT_BACKWARD,
-//                            N0,N1,N2,
-//                            fftData
-//                            );
+    u_int8_t* data = (u_int8_t*) malloc( sizeof(u_int8_t*) * N0 * N1 * N2);
+    for (int i = 0; i < xSize * ySize * zSize; i++)
+    {
+        double x = sqrt( pow(fftData[2 * i], 2) + pow(fftData[2 * i + 1], 2) );
+        data[i] = x;
+        //data[i] = fftData[2 * i];
+    }
 
+    QImage xImage( data, xSize, ySize, QImage::Format_Grayscale8);
+    ui->xProjectionImage->setPixmap(QPixmap::fromImage( xImage ));
+    ui->xProjectionImage->show();
 
-//    u_int8_t* data = (u_int8_t*) malloc( sizeof(u_int8_t*) * N0 * N1 * N2);
-//    for (int i = 0; i < xSize * ySize * zSize; i++)
-//    {
-//        double x = sqrt( pow(fftData[2 * i], 2) + pow(fftData[2 * i + 1], 2) );
-//        data[i] = x;
-
-//        //data[i] = fftData[2 * i];
-//    }
-
-//    QImage xImage( data, xSize, ySize, QImage::Format_Grayscale8);
-//    ui->xProjectionImage->setPixmap(QPixmap::fromImage( xImage ));
-//    ui->xProjectionImage->show();
-
-//    return NULL;
+    return NULL;
 
 }

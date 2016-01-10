@@ -1,6 +1,7 @@
 #ifndef COMPLEXIMAGE_H
 #define COMPLEXIMAGE_H
 
+
 #include <Image.h>
 
 template< class T >
@@ -15,6 +16,7 @@ public:
      */
     ComplexImage( const Dimensions2D dimensions, T* data );
 
+    ~ComplexImage();
     /**
      * @brief getSizeInBytes
      * @return Size of the image in bytes.
@@ -135,5 +137,6 @@ typedef ComplexImage< float > ComplexImageF;
  * An double precision ComplexImage.
  */
 typedef ComplexImage< double > ComplexImageD;
+
 
 #endif // COMPLEXIMAGE_H

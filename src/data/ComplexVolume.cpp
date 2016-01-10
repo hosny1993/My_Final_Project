@@ -1,7 +1,9 @@
 #include "ComplexVolume.h"
 
+
 template< class T >
 ComplexVolume< T >::ComplexVolume(const Dimensions3D dimensions, T *data)
+    : Volume<T> (NULL, NULL)
 {
     /* initialize parent class( Volume ) with tiwce dimensions for real and imaginary */
     this->dimensions_ = dimensions * 2; // dimensions_ = 2 * dimension
@@ -12,7 +14,8 @@ ComplexVolume< T >::ComplexVolume(const Dimensions3D dimensions, T *data)
 
 /* extract complex size orthognal to x direction by
  * get index of data when x fixed at specific value (slice)
- * then create image with y and z data */
+ * then create image with y and z data
+ */
 template< class T >
 ComplexImage<T>* ComplexVolume< T >::getSliceX(const u_int64_t x) const
 {
@@ -40,7 +43,8 @@ ComplexImage<T>* ComplexVolume< T >::getSliceX(const u_int64_t x) const
 
 /* extract complex size orthognal to y direction by
  * get index of data when y fixed at specific value (slice)
- * then create image with x and z data */
+ * then create image with x and z data
+ */
 template< class T >
 ComplexImage<T>* ComplexVolume< T >::getSliceY(const u_int64_t y) const
 {
@@ -68,7 +72,8 @@ ComplexImage<T>* ComplexVolume< T >::getSliceY(const u_int64_t y) const
 
 /* extract complex size orthognal to z direction by
  * get index of data when z fixed at specific value (slice)
- * then create image with x and y data */
+ * then create image with x and y data
+ */
 template< class T >
 ComplexImage<T>* ComplexVolume< T >::getSliceZ(const u_int64_t z) const
 {
@@ -93,3 +98,5 @@ ComplexImage<T>* ComplexVolume< T >::getSliceZ(const u_int64_t z) const
     /* return poninter to complex image*/
     return complexImage;
 }
+
+#include <ComplexVolume.ipp>

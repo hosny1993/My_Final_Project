@@ -1,0 +1,50 @@
+GIT:
+
+* 	git init 		>> to create offline repository.
+
+* 	Tracked files are files that were in the last snapshot; 
+	they can be unmodified, modified, or staged.
+	When you first clone a repository, all of
+	your files will be tracked and unmodified because you just checked them out
+	and haven’t edited anything.
+
+*	git status		>> check repo status
+
+* 	git add 		>> track new file
+
+* 	(use "git add <file>..." to update what will be committed)
+    (use "git checkout -- <file>..." to discard changes in working directory)
+
+* 	git commit 		>> commit the changes to local repo
+
+* 	git rm 			>> remove files from local repo
+
+* 	git mv 			>> rename files
+
+* 	git log 		>> commands history
+
+* 	git log --since=2.weeks
+	git log --since=1.seconds
+	git log --since=1.minuts
+
+*	git commit --amend	>> 	if you commit and then realize you forgot to stage the
+							changes in a file you wanted to add to this commit,
+* 	git reset HEAD		>>  unstage files but not untrack
+	git reset HEAD CONTRIBUTING.md
+
+*	git checkout		>>  reset before commit and back oldest same state,
+							git checkout
+							
+	git branch -m <oldname> <newname> >> rename branch
+
+*	git remote add url	>>  add remote repository 
+
+* 	git fetch origi	>> to get data from your remote projects
+
+* 	git push [remote-name]	[branch-name] 	>> push files to remote server and branch name
+	git remote show origin
+	git remote rename                       >> Removing and Renaming Remotes
+
+* 	git tag "v1.0.0"			>> point in history to specific points  (( very useful becasue it save state of what 																			you have until now ))
+
+* git config --global alias.[command name] 	[target command] 	>> alias the target to command name  
