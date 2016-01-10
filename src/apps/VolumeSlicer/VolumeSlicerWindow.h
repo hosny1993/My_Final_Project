@@ -77,7 +77,6 @@ private: // Private member variables
      */
     Volume8* volume_;
 
-    ComplexVolumeF* complexVolume_;
     /**
      * @brief volumePrefix_
      */

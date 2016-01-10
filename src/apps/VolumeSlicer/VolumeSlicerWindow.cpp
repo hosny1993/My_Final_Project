@@ -131,7 +131,13 @@ u_int8_t* VolumeSlicerWindow::xSliceFFT()
                              fftData );
 
     Dimensions3D dim3(N0, N1, N2);
-    complexVolume_ = new ComplexVolumeF(dim3, fftData);
+    std::cout << "\nDim Size    : " << dim3.volumeSize() << std::endl;
+    std::cout << "\nBuffer Size : " << bufferSize << std::endl;
+    ComplexVolumeF* volusme = new ComplexVolumeF(dim3, fftData);
+    std::cout << "\nVolume Size : " << volusme->getSizeInBytes() << std::endl;
+    ComplexImageF* img = volusme->getSliceX(0);
+    std::cout << img->getSizeInBytes() << std::endl;
+
 
     fftData = fft3->clFFT3D( CLFFT_SINGLE,
                              CLFFT_COMPLEX_INTERLEAVED,

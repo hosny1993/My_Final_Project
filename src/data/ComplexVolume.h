@@ -36,6 +36,8 @@ public:
      */
     ComplexImage<T>* getSliceZ( const u_int64_t z ) const;
 
+    uint64_t getSizeInBytes() const;
+
 };
 
 /**

@@ -3,10 +3,10 @@
 
 template< class T >
 ComplexVolume< T >::ComplexVolume(const Dimensions3D dimensions, T *data)
-    : Volume<T> (NULL, NULL)
+    : Volume<T> ("", NULL)
 {
     /* initialize parent class( Volume ) with tiwce dimensions for real and imaginary */
-    this->dimensions_ = dimensions * 2; // dimensions_ = 2 * dimension
+    this->dimensions_ = dimensions ; // dimensions_ = 2 * dimension
 
     /* initialize parent class( Volume ) with data */
     this->data_ = data;
@@ -20,8 +20,8 @@ template< class T >
 ComplexImage<T>* ComplexVolume< T >::getSliceX(const u_int64_t x) const
 {
     /* complex dimensions */
-    Dimensions2D complexImageDim( this->getSizeY(), this->getSizeZ() );
-    T* sliceData = new T[ complexImageDim.imageSize() ];
+    Dimensions2D complexImageDim( this->dimensions_.y, this->dimensions_.z );
+    T* sliceData = new T[ complexImageDim.imageSize()];
 
     /* get slice data */
     u_int64_t sliceIndex = 0;
@@ -49,8 +49,8 @@ template< class T >
 ComplexImage<T>* ComplexVolume< T >::getSliceY(const u_int64_t y) const
 {
     /* complex dimensions */
-    Dimensions2D complexImageDim( this->getSizeX(), this->getSizeZ() );
-    T* sliceData = new T[ complexImageDim.imageSize() ];
+    Dimensions2D complexImageDim( this->dimensions_.x, this->dimensions_.z );
+    T* sliceData = new T[ complexImageDim.imageSize()];
 
     /* get slice data */
     u_int64_t sliceIndex = 0;
@@ -78,8 +78,8 @@ template< class T >
 ComplexImage<T>* ComplexVolume< T >::getSliceZ(const u_int64_t z) const
 {
     /* complex dimensions */
-    Dimensions2D complexImageDim( this->getSizeY(), this->getSizeZ() );
-    T* sliceData = new T[ complexImageDim.imageSize() ];
+    Dimensions2D complexImageDim( this->dimensions_.x, this->dimensions_.y );
+    T* sliceData = new T[ complexImageDim.imageSize()];
 
     /* get slice data */
     u_int64_t sliceIndex = 0;
@@ -98,5 +98,12 @@ ComplexImage<T>* ComplexVolume< T >::getSliceZ(const u_int64_t z) const
     /* return poninter to complex image*/
     return complexImage;
 }
+
+template< class T>
+uint64_t ComplexVolume<T>::getSizeInBytes() const
+{
+    return this->dimensions_.volumeSize() * sizeof(T) * 2;
+}
+
 
 #include <ComplexVolume.ipp>
