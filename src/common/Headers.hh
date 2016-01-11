@@ -13,6 +13,8 @@
 #include <iostream>
 #include <assert.h>
 #include <typeinfo>
+#include <clFFT.h>
+#include <FFT.h>
 
 #endif // HEADERS_HH
 

@@ -51,6 +51,7 @@ include_directories( system )
 # Create a library with the main compoments of the framework and link the apps
 # against it later to reduce the compilation time
 set( CL_FVR_LIBRARY "CLFVR" )
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall")
 add_library( ${CL_FVR_LIBRARY} ${CL_FVR_SOURCES} ${CL_FVR_HEADERS} )
 set_property( TARGET ${CL_FVR_LIBRARY} PROPERTY IMPORTED_LOCATION
     ${CMAKE_BINARY_DIRECTORY}/lib${CL_FVR_LIBRARY}.a )

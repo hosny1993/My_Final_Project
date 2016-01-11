@@ -36,6 +36,17 @@ public:
      */
     ComplexImage<T>* getSliceZ( const u_int64_t z ) const;
 
+    /**
+     * @brief getInverseSlice
+     * @param reference to complex image
+     * @return extracted slice in spatial domain
+     */
+    float* getInverseSlice(ComplexImageF *img) const;
+
+    /**
+     * @brief getSizeInBytes
+     * @return complex volume size in bytes
+     */
     uint64_t getSizeInBytes() const;
 
 };

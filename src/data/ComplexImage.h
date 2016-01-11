@@ -17,6 +17,7 @@ public:
     ComplexImage( const Dimensions2D dimensions, T* data );
 
     ~ComplexImage();
+
     /**
      * @brief getSizeInBytes
      * @return Size of the image in bytes.

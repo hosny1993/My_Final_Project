@@ -3,16 +3,17 @@
 
 template< class T >
 ComplexVolume< T >::ComplexVolume(const Dimensions3D dimensions, T *data)
-    : Volume<T> ("", NULL)
+    : Volume<T> ("", false)
 {
     /* initialize parent class( Volume ) with tiwce dimensions for real and imaginary */
-    this->dimensions_ = dimensions ; // dimensions_ = 2 * dimension
+    this->dimensions_ = dimensions ; // dimensions_ = dimension
 
     /* initialize parent class( Volume ) with data */
     this->data_ = data;
 }
 
-/* extract complex size orthognal to x direction by
+/*
+ * extract complex size orthognal to x direction by
  * get index of data when x fixed at specific value (slice)
  * then create image with y and z data
  */
@@ -20,14 +21,14 @@ template< class T >
 ComplexImage<T>* ComplexVolume< T >::getSliceX(const u_int64_t x) const
 {
     /* complex dimensions */
-    Dimensions2D complexImageDim( this->dimensions_.y, this->dimensions_.z );
+    Dimensions2D complexImageDim( this->dimensions_.y * 2, this->dimensions_.z * 2);
     T* sliceData = new T[ complexImageDim.imageSize()];
 
     /* get slice data */
     u_int64_t sliceIndex = 0;
-    for( u_int64_t i = 0; i < this->dimensions_.y; i++ )
+    for( u_int64_t i = 0; i < complexImageDim.y; i++ )
     {
-        for( u_int64_t j = 0; j < this->dimensions_.z; j++ )
+        for( u_int64_t j = 0; j < complexImageDim.x; j++ )
         {
             sliceData[sliceIndex] = this->data_[this->get1DIndex( x, i, j )]; // x constant
             sliceIndex++;
@@ -41,7 +42,8 @@ ComplexImage<T>* ComplexVolume< T >::getSliceX(const u_int64_t x) const
     return complexImage;
 }
 
-/* extract complex size orthognal to y direction by
+/*
+ * extract complex size orthognal to y direction by
  * get index of data when y fixed at specific value (slice)
  * then create image with x and z data
  */
@@ -49,14 +51,15 @@ template< class T >
 ComplexImage<T>* ComplexVolume< T >::getSliceY(const u_int64_t y) const
 {
     /* complex dimensions */
-    Dimensions2D complexImageDim( this->dimensions_.x, this->dimensions_.z );
+    Dimensions2D complexImageDim( this->dimensions_.x * 2, this->dimensions_.z * 2 );
+
     T* sliceData = new T[ complexImageDim.imageSize()];
 
     /* get slice data */
     u_int64_t sliceIndex = 0;
-    for( u_int64_t i = 0; i < this->dimensions_.x; i++ )
+    for( u_int64_t i = 0; i < complexImageDim.y; i++ )
     {
-        for( u_int64_t j = 0; j < this->dimensions_.z; j++ )
+        for( u_int64_t j = 0; j < complexImageDim.x; j++ )
         {
             sliceData[sliceIndex] = this->data_[this->get1DIndex( i, y, j )]; // y constant
             sliceIndex++;
@@ -70,22 +73,23 @@ ComplexImage<T>* ComplexVolume< T >::getSliceY(const u_int64_t y) const
     return complexImage;
 }
 
-/* extract complex size orthognal to z direction by
+/*
+ * extract complex size orthognal to z direction by
  * get index of data when z fixed at specific value (slice)
- * then create image with x and y data
+ * then create image with x and y data.
  */
 template< class T >
 ComplexImage<T>* ComplexVolume< T >::getSliceZ(const u_int64_t z) const
 {
     /* complex dimensions */
-    Dimensions2D complexImageDim( this->dimensions_.x, this->dimensions_.y );
+    Dimensions2D complexImageDim( this->dimensions_.x * 2, this->dimensions_.y * 2 );
     T* sliceData = new T[ complexImageDim.imageSize()];
 
     /* get slice data */
     u_int64_t sliceIndex = 0;
-    for( u_int64_t i = 0; i < this->dimensions_.x; i++ )
+    for( u_int64_t i = 0; i < complexImageDim.y; i++ )
     {
-        for( u_int64_t j = 0; j < this->dimensions_.y; j++ )
+        for( u_int64_t j = 0; j < complexImageDim.x; j++ )
         {
             sliceData[sliceIndex] = this->data_[this->get1DIndex( i, j, z )]; // z constant
             sliceIndex++;
@@ -99,11 +103,37 @@ ComplexImage<T>* ComplexVolume< T >::getSliceZ(const u_int64_t z) const
     return complexImage;
 }
 
+/*
+ * get complex volume size  = 2 * Normal volume size.
+ */
 template< class T>
 uint64_t ComplexVolume<T>::getSizeInBytes() const
 {
     return this->dimensions_.volumeSize() * sizeof(T) * 2;
 }
 
+/*
+ * get 2d inverse of extracted slice in any direction
+ * by reference the complex image contain the slice
+ */
+template< class T>
+float*  ComplexVolume<T>::getInverseSlice(ComplexImageF* img) const
+{
+    float* inverseFFT = new float[ img->getSizeInBytes() ];
+    inverseFFT = img->getData();
+
+    FFT::oclFFT* fft2 = new FFT::oclFFT();
+
+    /* perform inverse 2dfft*/
+    inverseFFT = fft2->clFFT2D( CLFFT_SINGLE,
+                                CLFFT_COMPLEX_INTERLEAVED,
+                                CLFFT_BACKWARD,
+                                img->getSizeX()/2, // clfft buffer = 2 * normal dimension
+                                img->getSizeY()/2, // clfft buffer = 2 * normal dimension
+                                inverseFFT );
+
+    return inverseFFT;
+
+}
 
 #include <ComplexVolume.ipp>

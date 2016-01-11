@@ -92,9 +92,14 @@ void VolumeSlicerWindow::on_zSlider_valueChanged( int value )
     ui->zSliceImage->show();
 }
 
+/*
+ * This function to test extracted central slice in frequency domain
+ * then back to spatial domain by inverse 2dfft
+ */
 u_int8_t* VolumeSlicerWindow::xSliceFFT()
 {
 
+    /* variables definitions */
     u_int8_t* volumeData = volume_->getData();
 
     u_int64_t xSize = volume_->getSizeX();
@@ -105,10 +110,11 @@ u_int8_t* VolumeSlicerWindow::xSliceFFT()
     size_t N1 = ySize;
     size_t N2 = zSize;
 
-    float* fftData = NULL;
-    size_t bufferSize = 2 * xSize * ySize * zSize * sizeof(float*);
-    fftData = (float*) malloc(bufferSize);
+    /* create buffer */
+    size_t bufferSize = 2 * xSize * ySize * zSize * sizeof(float);
+    float* fftData = new float[ bufferSize ];
 
+    /* get volume data */
     for (int z = 0; z < zSize; z++)
     {
         for (int y = 0; y < ySize; y++)
@@ -122,6 +128,7 @@ u_int8_t* VolumeSlicerWindow::xSliceFFT()
         }
     }
 
+    /* perform fft on volume data */
     FFT::oclFFT* fft3 = new FFT::oclFFT();
 
     fftData = fft3->clFFT3D( CLFFT_SINGLE,
@@ -130,30 +137,33 @@ u_int8_t* VolumeSlicerWindow::xSliceFFT()
                              N0,N1,N2,
                              fftData );
 
+
+    /* see current sizes */
     Dimensions3D dim3(N0, N1, N2);
     std::cout << "\nDim Size    : " << dim3.volumeSize() << std::endl;
     std::cout << "\nBuffer Size : " << bufferSize << std::endl;
-    ComplexVolumeF* volusme = new ComplexVolumeF(dim3, fftData);
-    std::cout << "\nVolume Size : " << volusme->getSizeInBytes() << std::endl;
-    ComplexImageF* img = volusme->getSliceX(0);
-    std::cout << img->getSizeInBytes() << std::endl;
 
+    /* create complex volume */
+    ComplexVolumeF* volume = new ComplexVolumeF(dim3, fftData);
+    std::cout << "\nVolume Size : " << volume->getSizeInBytes() << std::endl;
 
-    fftData = fft3->clFFT3D( CLFFT_SINGLE,
-                             CLFFT_COMPLEX_INTERLEAVED,
-                             CLFFT_BACKWARD,
-                             N0,N1,N2,
-                             fftData );
+    /* extract slice in x direction */
+    ComplexImageF* img = volume->getSliceX(128); // central slice in x direction
+    std::cout << "Image Size : " << img->getSizeInBytes() << std::endl;
 
+    /* back transform slice into spatial domine */
+    float* d2if = new float[ img->getSizeInBytes() ];
+    d2if = volume->getInverseSlice(img);
 
-    u_int8_t* data = (u_int8_t*) malloc( sizeof(u_int8_t*) * N0 * N1 * N2);
-    for (int i = 0; i < xSize * ySize * zSize; i++)
+    /* transform float data into unsigned int to display it*/
+    u_int8_t* data = (u_int8_t*) malloc( sizeof(u_int8_t*) * img->getSizeInBytes());
+    for (int i = 0; i < xSize * ySize ; i++)
     {
-        double x = sqrt( pow(fftData[2 * i], 2) + pow(fftData[2 * i + 1], 2) );
+        double x = sqrt( pow(d2if[2 * i], 2) + pow(d2if[2 * i + 1], 2) );
         data[i] = x;
-        //data[i] = fftData[2 * i];
     }
 
+    /* create qimage with extracted slice data */
     QImage xImage( data, xSize, ySize, QImage::Format_Grayscale8);
     ui->xProjectionImage->setPixmap(QPixmap::fromImage( xImage ));
     ui->xProjectionImage->show();
