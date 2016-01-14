@@ -20,7 +20,9 @@ class VolumeSlicerWindow : public QWidget
 public:
     explicit VolumeSlicerWindow( QWidget *parent = 0,
                                  std::string volumePrefix = "" );
-    u_int8_t* xSliceFFT();
+
+    u_int8_t* xSliceFFT(const int xSlider) const;
+
     ~VolumeSlicerWindow();
 
 private slots: // Slots
@@ -78,6 +80,11 @@ private: // Private member variables
     Volume8* volume_;
 
     /**
+     * @brief volume
+     */
+    ComplexVolumeF* complexVolume_ ;
+
+    /**
      * @brief volumePrefix_
      */
     std::string volumePrefix_;
@@ -87,6 +94,15 @@ private: // Private member variables
      */
     Ui::VolumeSlicerWindow *ui;
 
+    /**
+     * @brief fft3
+     */
+    FFT::oclFFT* fft3_;
+
+    /**
+     * @brief xSize_ , ySize_, zSize_
+     */
+    size_t xSize_, ySize_, zSize_;
 
 };
 

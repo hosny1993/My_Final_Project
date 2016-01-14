@@ -114,4 +114,40 @@ T ComplexImage<T>::getPhaseValue(const Pixel2DIndex xy) const
     return  atan( imag / real );
 }
 
+/*
+ * get 2d inverse of extracted slice in any direction
+ * by reference the complex image contain the slice
+ */
+template< class T>
+float* ComplexImage<T>::getInverseSlice() const
+{
+
+    float* inverseFFT = (float*) malloc ( this->getSizeInBytes() );
+
+    /* Initialize inverseFFT with complex image data */
+    for (int y = 0; y < this->getSizeY(); y++)
+        for (int x = 0; x < this->getSizeX(); x++)
+        {
+            unsigned int idx    = 2 * (x + y * this->getSizeX());
+            float* temp = (float*) this->getValue(x, y);
+
+            inverseFFT[idx]     = temp[0];
+            inverseFFT[idx + 1] = temp[1];
+        }
+
+    /* FFT Object */
+    FFT::oclFFT* fft2 = new FFT::oclFFT();
+
+    /* Perform inverse 2dfft */
+    inverseFFT = fft2->clFFT2D( CLFFT_SINGLE,
+                                CLFFT_COMPLEX_INTERLEAVED,
+                                CLFFT_BACKWARD,
+                                this->getSizeX(),
+                                this->getSizeY(),
+                                inverseFFT );
+
+    return inverseFFT;
+
+}
+
 #include <ComplexImage.ipp>

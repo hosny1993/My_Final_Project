@@ -112,28 +112,5 @@ uint64_t ComplexVolume<T>::getSizeInBytes() const
     return this->dimensions_.volumeSize() * sizeof(T) * 2;
 }
 
-/*
- * get 2d inverse of extracted slice in any direction
- * by reference the complex image contain the slice
- */
-template< class T>
-float*  ComplexVolume<T>::getInverseSlice(ComplexImageF* img) const
-{
-    float* inverseFFT = new float[ img->getSizeInBytes() ];
-    inverseFFT = img->getData();
-
-    FFT::oclFFT* fft2 = new FFT::oclFFT();
-
-    /* perform inverse 2dfft*/
-    inverseFFT = fft2->clFFT2D( CLFFT_SINGLE,
-                                CLFFT_COMPLEX_INTERLEAVED,
-                                CLFFT_BACKWARD,
-                                img->getSizeX()/2, // clfft buffer = 2 * normal dimension
-                                img->getSizeY()/2, // clfft buffer = 2 * normal dimension
-                                inverseFFT );
-
-    return inverseFFT;
-
-}
 
 #include <ComplexVolume.ipp>

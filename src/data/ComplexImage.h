@@ -100,6 +100,12 @@ public:
      */
     T getPhaseValue( const Pixel2DIndex xy ) const;
 
+    /**
+     * @brief getInverseSlice
+     * @param reference to complex image
+     * @return extracted slice in spatial domain
+     */
+    float* getInverseSlice() const;
 
 };
 
