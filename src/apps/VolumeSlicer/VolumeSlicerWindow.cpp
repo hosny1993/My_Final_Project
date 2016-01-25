@@ -18,50 +18,13 @@ VolumeSlicerWindow::VolumeSlicerWindow( QWidget *parent,
     connect( this, SIGNAL( zSliderChanged( int )),
              this, SLOT( on_zSlider_valueChanged( int )));
 
-    u_int8_t* volumeData = volume_->getData();
-
-    xSize_ = volume_->getSizeX();
-    ySize_ = volume_->getSizeY();
-    zSize_ = volume_->getSizeZ();
-
-    fft3_ = new FFT::oclFFT();
-
-    /* create buffer */
-    size_t bufferSize = 2 * xSize_ * ySize_ * zSize_ * sizeof(float);
-    float* fftData = new float[ bufferSize ];
-
-    /* get volume data */
-    for (int z = 0; z < zSize_; z++)
-    {
-        for (int y = 0; y < ySize_; y++)
-        {
-            for (int x = 0; x < xSize_; x++)
-            {
-                unsigned int idx = 2 * (x + y * xSize_ + z * xSize_ * ySize_);
-                fftData[idx]  = volumeData[volume_->get1DIndex(x, y, z)];
-                fftData[idx + 1] = 0.f;
-            }
-        }
-    }
-
-    fftData = fft3_->clFFT3D( CLFFT_SINGLE,
-                             CLFFT_COMPLEX_INTERLEAVED,
-                             CLFFT_FORWARD,
-                             xSize_, ySize_, zSize_,
-                             fftData );
-
-    /* see current sizes */
-    Dimensions3D dim3(xSize_, ySize_, zSize_);
-
-    /* create complex volume */
-    complexVolume_ = new ComplexVolumeF(dim3, fftData);
 
     // Set the initial slices at the center of the volume.
     xSliderChanged( ui->xSlider->value());
     ySliderChanged( ui->ySlider->value());
     zSliderChanged( ui->zSlider->value());
 
-    xSliceFFT(50);
+    xSliceFFT();
 }
 
 VolumeSlicerWindow::~VolumeSlicerWindow()
@@ -134,30 +97,68 @@ void VolumeSlicerWindow::on_zSlider_valueChanged( int value )
  * This function to test extracted central slice in frequency domain
  * then back to spatial domain by inverse 2dfft
  */
-u_int8_t* VolumeSlicerWindow::xSliceFFT(int xSlider) const
+u_int8_t* VolumeSlicerWindow::xSliceFFT() const
 {
 
-    /* extract slice in x direction */
-    ComplexImageF* xPro = complexVolume_->getSliceX(127);
-    float* d2if = xPro->getData();
+//    u_int8_t* volumeData = volume_->getData();
 
-    /* back transform slice into spatial domine */
-    Dimensions2D dim(xPro->getSizeX(), xPro->getSizeY());
-    ComplexImageF* img = new ComplexImageF(dim, d2if);
-    d2if = img->getInverseSlice();
+//    xSize_ = volume_->getSizeX();
+//    ySize_ = volume_->getSizeY();
+//    zSize_ = volume_->getSizeZ();
 
-    /* transform float data into unsigned int to display it*/
-    u_int8_t* data = (u_int8_t*) malloc( img->getSizeInBytes() );
-    for (int i = 0; i < img->getSizeX() * img->getSizeY(); i++)
-    {
-        data[i] = d2if[2 * i];
-    }
+//    fft3_ = new FFT::oclFFT();
 
-    /* create qimage with extracted slice data */
-    QImage xImage( data, img->getSizeX(), img->getSizeY(), QImage::Format_Grayscale8);
-    ui->xProjectionImage->setPixmap(QPixmap::fromImage( xImage ));
-    ui->xProjectionImage->show();
+//    /* create buffer */
+//    size_t bufferSize = 2 * xSize_ * ySize_ * zSize_ * sizeof(float);
+//    float* fftData = new float[ bufferSize ];
 
-    return NULL;
+//    /* get volume data */
+//    for (int z = 0; z < zSize_; z++)
+//    {
+//        for (int y = 0; y < ySize_; y++)
+//        {
+//            for (int x = 0; x < xSize_; x++)
+//            {
+//                unsigned int idx = 2 * (x + y * xSize_ + z * xSize_ * ySize_);
+//                fftData[idx]  = volumeData[volume_->get1DIndex(x, y, z)];
+//                fftData[idx + 1] = 0.f;
+//            }
+//        }
+//    }
+
+//    fftData = fft3_->clFFT3D( CLFFT_SINGLE,
+//                              CLFFT_COMPLEX_INTERLEAVED,
+//                              CLFFT_FORWARD,
+//                              xSize_, ySize_, zSize_,
+//                              fftData );
+
+//    /* see current sizes */
+//    Dimensions3D dim3(xSize_, ySize_, zSize_);
+
+//    /* create complex volume */
+//    complexVolume_ = new ComplexVolumeF(dim3, fftData);
+
+//    /* extract slice in x direction */
+//    ComplexImageF* xPro = complexVolume_->getSliceX(xSlider);
+//    float* d2if = xPro->getData();
+
+//    /* back transform slice into spatial domine */
+//    Dimensions2D dim(xPro->getSizeX(), xPro->getSizeY());
+//    ComplexImageF* img = new ComplexImageF(dim, d2if);
+//    d2if = img->getInverseSlice();
+
+//    /* transform float data into unsigned int to display it*/
+//    u_int8_t* data = (u_int8_t*) malloc( img->getSizeInBytes() );
+//    for (int i = 0; i < img->getSizeX() * img->getSizeY(); i++)
+//    {
+//        data[i] = d2if[2 * i];
+//    }
+
+//    /* create qimage with extracted slice data */
+//    QImage xImage( data, img->getSizeX(), img->getSizeY(), QImage::Format_Grayscale8);
+//    ui->xProjectionImage->setPixmap(QPixmap::fromImage( xImage ));
+//    ui->xProjectionImage->show();
+
+//    return NULL;
 
 }

@@ -2,8 +2,8 @@
 
 
 template< class T >
-ComplexVolume< T >::ComplexVolume(const Dimensions3D dimensions, T *data)
-    : Volume<T> ("", false)
+ComplexVolume< T >::ComplexVolume( const Dimensions3D dimensions, T *data )
+    : Volume<T> ( "", false )
 {
     /* initialize parent class( Volume ) with tiwce dimensions for real and imaginary */
     this->dimensions_ = dimensions ; // dimensions_ = dimension
@@ -18,10 +18,12 @@ ComplexVolume< T >::ComplexVolume(const Dimensions3D dimensions, T *data)
  * then create image with y and z data
  */
 template< class T >
-ComplexImage<T>* ComplexVolume< T >::getSliceX(const u_int64_t x) const
+ComplexImage<T>* ComplexVolume< T >::getSliceX( const u_int64_t x ) const
 {
     /* complex dimensions */
-    Dimensions2D complexImageDim( this->dimensions_.y * 2, this->dimensions_.z * 2);
+    Dimensions2D complexImageDim( this->dimensions_.y * 2,
+                                  this->dimensions_.z * 2);
+
     T* sliceData = new T[ complexImageDim.imageSize()];
 
     /* get slice data */
@@ -30,13 +32,14 @@ ComplexImage<T>* ComplexVolume< T >::getSliceX(const u_int64_t x) const
     {
         for( u_int64_t j = 0; j < complexImageDim.x; j++ )
         {
-            sliceData[sliceIndex] = this->data_[this->get1DIndex( x, i, j )]; // x constant
+            sliceData[ sliceIndex ] = this->data_[ this->get1DIndex( x, i, j ) ]; // x constant
             sliceIndex++;
         }
     }
 
     /* create complex image */
-    ComplexImage<T>* complexImage = new ComplexImage<T>(complexImageDim, sliceData);
+    ComplexImage<T>* complexImage = new ComplexImage<T>( complexImageDim,
+                                                         sliceData );
 
     /* return poninter to complex image*/
     return complexImage;
@@ -48,12 +51,13 @@ ComplexImage<T>* ComplexVolume< T >::getSliceX(const u_int64_t x) const
  * then create image with x and z data
  */
 template< class T >
-ComplexImage<T>* ComplexVolume< T >::getSliceY(const u_int64_t y) const
+ComplexImage<T>* ComplexVolume< T >::getSliceY( const u_int64_t y ) const
 {
     /* complex dimensions */
-    Dimensions2D complexImageDim( this->dimensions_.x * 2, this->dimensions_.z * 2 );
+    Dimensions2D complexImageDim( this->dimensions_.x * 2,
+                                  this->dimensions_.z * 2 );
 
-    T* sliceData = new T[ complexImageDim.imageSize()];
+    T* sliceData = new T[ complexImageDim.imageSize() ];
 
     /* get slice data */
     u_int64_t sliceIndex = 0;
@@ -61,13 +65,14 @@ ComplexImage<T>* ComplexVolume< T >::getSliceY(const u_int64_t y) const
     {
         for( u_int64_t j = 0; j < complexImageDim.x; j++ )
         {
-            sliceData[sliceIndex] = this->data_[this->get1DIndex( i, y, j )]; // y constant
+            sliceData[ sliceIndex ] = this->data_[ this->get1DIndex( i, y, j ) ]; // y constant
             sliceIndex++;
         }
     }
 
     /* create complex image */
-    ComplexImage<T>* complexImage = new ComplexImage<T>(complexImageDim, sliceData);
+    ComplexImage<T>* complexImage = new ComplexImage<T>( complexImageDim,
+                                                         sliceData );
 
     /* return poninter to complex image*/
     return complexImage;
@@ -79,11 +84,13 @@ ComplexImage<T>* ComplexVolume< T >::getSliceY(const u_int64_t y) const
  * then create image with x and y data.
  */
 template< class T >
-ComplexImage<T>* ComplexVolume< T >::getSliceZ(const u_int64_t z) const
+ComplexImage<T>* ComplexVolume< T >::getSliceZ( const u_int64_t z ) const
 {
     /* complex dimensions */
-    Dimensions2D complexImageDim( this->dimensions_.x * 2, this->dimensions_.y * 2 );
-    T* sliceData = new T[ complexImageDim.imageSize()];
+    Dimensions2D complexImageDim( this->dimensions_.x * 2,
+                                  this->dimensions_.y * 2 );
+
+    T* sliceData = new T[ complexImageDim.imageSize() ];
 
     /* get slice data */
     u_int64_t sliceIndex = 0;
@@ -91,13 +98,14 @@ ComplexImage<T>* ComplexVolume< T >::getSliceZ(const u_int64_t z) const
     {
         for( u_int64_t j = 0; j < complexImageDim.x; j++ )
         {
-            sliceData[sliceIndex] = this->data_[this->get1DIndex( i, j, z )]; // z constant
+            sliceData[ sliceIndex ] = this->data_[ this->get1DIndex( i, j, z ) ]; // z constant
             sliceIndex++;
         }
     }
 
     /* create complex image */
-    ComplexImage<T>* complexImage = new ComplexImage<T>(complexImageDim, sliceData);
+    ComplexImage<T>* complexImage = new ComplexImage<T>( complexImageDim,
+                                                         sliceData );
 
     /* return poninter to complex image*/
     return complexImage;

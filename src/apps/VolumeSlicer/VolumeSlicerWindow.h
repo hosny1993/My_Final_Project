@@ -21,7 +21,7 @@ public:
     explicit VolumeSlicerWindow( QWidget *parent = 0,
                                  std::string volumePrefix = "" );
 
-    u_int8_t* xSliceFFT(const int xSlider) const;
+    u_int8_t* xSliceFFT() const;
 
     ~VolumeSlicerWindow();
 

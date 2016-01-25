@@ -1,8 +1,8 @@
 #include "ComplexImage.h"
 
 template< class T >
-ComplexImage< T >::ComplexImage (const Dimensions2D dimensions, T *data)
-    : Image<T>(dimensions, NULL)
+ComplexImage< T >::ComplexImage ( const Dimensions2D dimensions, T *data )
+    : Image<T>( dimensions, NULL )
 {
     this->dimensions_ = dimensions;
     this->data_ = data;
@@ -22,8 +22,8 @@ T* ComplexImage< T >::getValue( const uint64_t x, const uint64_t y ) const
 {
     const uint64_t index = this->get1DIndex( x, y );
     T* value = new T[ 2 ];
-    value[0] = this->data_[ ( 2 * index ) ];
-    value[1] = this->data_[ ( 2 * index ) + 1 ];
+    value[ 0 ] = this->data_[ ( 2 * index ) ];
+    value[ 1 ] = this->data_[ ( 2 * index ) + 1 ];
     return value;
 }
 
@@ -33,8 +33,8 @@ T* ComplexImage< T >::getValue( const Pixel2DIndex xy ) const
 {
     const uint64_t index = this->get1DIndex( xy );
     T* value = new T[ 2 ];
-    value[0] = this->data_[ ( 2 * index ) ];
-    value[1] = this->data_[ ( 2 * index ) + 1 ];
+    value[ 0 ] = this->data_[ ( 2 * index ) ];
+    value[ 1 ] = this->data_[ ( 2 * index ) + 1 ];
     return value;
 }
 
@@ -43,7 +43,7 @@ template< class T >
 T ComplexImage<T>::getRealValue( const uint64_t x, const uint64_t y ) const
 {
     const uint64_t index = this->get1DIndex( x, y );
-    T real = this->data_[ (2 * index) ];
+    T real = this->data_[ ( 2 * index ) ];
     return real;
 }
 
@@ -52,7 +52,7 @@ template< class T >
 T ComplexImage<T>::getRealValue( const Pixel2DIndex xy  ) const
 {
     const uint64_t index = this->get1DIndex( xy );
-    T real = this->data_[ (2 * index) ];
+    T real = this->data_[ ( 2 * index ) ];
     return real;
 }
 
@@ -61,7 +61,7 @@ template< class T >
 T ComplexImage<T>::getImaginaryValue( const uint64_t x, const uint64_t y ) const
 {
     const uint64_t index = this->get1DIndex( x, y );
-    T imag = this->data_[ (2 * index) + 1];
+    T imag = this->data_[ ( 2 * index ) + 1];
     return imag;
 }
 
@@ -70,7 +70,7 @@ template< class T >
 T ComplexImage<T>::getImaginaryValue( const Pixel2DIndex xy ) const
 {
     const uint64_t index = this->get1DIndex( xy );
-    T imag = this->data_[ (2 * index) + 1];
+    T imag = this->data_[ ( 2 * index ) + 1];
     return imag;
 }
 
@@ -86,7 +86,7 @@ T ComplexImage<T>::getMagnitudeValue( const uint64_t x, const uint64_t y ) const
 
 /* calculat sqrt(real^2 + imag^2) at the given coordinates */
 template< class T >
-T ComplexImage<T>::getMagnitudeValue(const Pixel2DIndex xy) const
+T ComplexImage<T>::getMagnitudeValue( const Pixel2DIndex xy ) const
 {
     const uint64_t index = this->get1DIndex( xy );
     T real = this->data_[ (2 * index) ];
@@ -96,7 +96,7 @@ T ComplexImage<T>::getMagnitudeValue(const Pixel2DIndex xy) const
 
 /* calculat tan-1(imag , real) at the given coordinates */
 template< class T >
-T ComplexImage<T>::getPhaseValue(const uint64_t x, const uint64_t y) const
+T ComplexImage<T>::getPhaseValue( const uint64_t x, const uint64_t y ) const
 {
     const uint64_t index = this->get1DIndex( x, y );
     T real = this->data_[ (2 * index) ];
@@ -106,7 +106,7 @@ T ComplexImage<T>::getPhaseValue(const uint64_t x, const uint64_t y) const
 
 /* calculat tan-1(imag , real) at the given coordinates */
 template< class T >
-T ComplexImage<T>::getPhaseValue(const Pixel2DIndex xy) const
+T ComplexImage<T>::getPhaseValue( const Pixel2DIndex xy ) const
 {
     const uint64_t index = this->get1DIndex( xy );
     T real = this->data_[ (2 * index) ];
@@ -125,14 +125,14 @@ float* ComplexImage<T>::getInverseSlice() const
     float* inverseFFT = (float*) malloc ( this->getSizeInBytes() );
 
     /* Initialize inverseFFT with complex image data */
-    for (int y = 0; y < this->getSizeY(); y++)
-        for (int x = 0; x < this->getSizeX(); x++)
+    for ( int y = 0; y < this->getSizeY(); y++ )
+        for ( int x = 0; x < this->getSizeX(); x++ )
         {
-            unsigned int idx    = 2 * (x + y * this->getSizeX());
-            float* temp = (float*) this->getValue(x, y);
+            unsigned int idx    = 2 * ( x + y * this->getSizeX() );
+            float* temp = (float*) this->getValue( x, y );
 
-            inverseFFT[idx]     = temp[0];
-            inverseFFT[idx + 1] = temp[1];
+            inverseFFT[ idx ]     = temp[ 0 ];
+            inverseFFT[ idx + 1 ] = temp[ 1 ];
         }
 
     /* FFT Object */

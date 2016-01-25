@@ -10,7 +10,7 @@ template< class T >
 class ComplexVolume : public Volume< T >
 {
 public:
-    ComplexVolume(const Dimensions3D dimensions, T* data);
+    ComplexVolume( const Dimensions3D dimensions, T* data );
 
     /**
      * @brief getSliceX
